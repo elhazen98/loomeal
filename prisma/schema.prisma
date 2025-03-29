@@ -17,6 +17,7 @@ model User {
 
   session Session[]
   input Input[]
+  result Result[]
 
 }
 
@@ -51,6 +52,8 @@ model Result {
   insight String
   createdAt DateTime @default(now())
 
+  userId String
+  user User @relation(fields: [userId], references: [id])
   inputId String @unique
   input Input @relation(fields: [inputId], references: [id])
 }
