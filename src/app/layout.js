@@ -1,4 +1,4 @@
-import { DM_Sans, Geist, Geist_Mono } from "next/font/google";
+import { Onest, Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -11,7 +11,7 @@ const geistMono = Geist_Mono({
     subsets: ["latin"],
 });
 
-const dmSans = DM_Sans({
+const onest = Onest({
     subsets: ["latin"],
 });
 
@@ -24,7 +24,7 @@ export default function RootLayout({ children }) {
     return (
         <html lang="en">
             <body
-                className={`${geistSans.variable} ${geistMono.variable} ${dmSans.className} antialiased loomeal`}
+                className={`${geistSans.variable} ${geistMono.variable} ${onest.className} antialiased loomeal`}
             >
                 {children}
             </body>
