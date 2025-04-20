@@ -1,5 +1,3 @@
-"use client";
-
 import { FormInput } from "./components/form-input";
 
 export default function Page() {

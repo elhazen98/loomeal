@@ -1,9 +1,14 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useActionState, useState } from "react";
 import { getDataAction } from "../action";
+import { IconLoading } from "@/components/ui/icons";
+import { useUser } from "../../components/user-provider";
 
 export const FormInput = () => {
+    const { id } = useUser();
     const [state, formAction, pending] = useActionState(getDataAction, {});
     const [context, setContext] = useState("");
     const [foods, setFoods] = useState([{ food: "", portion: "" }]);
@@ -32,7 +37,8 @@ export const FormInput = () => {
     };
 
     return (
-        <form action={formAction} className="flex flex-col gap-2">
+        <form action={formAction} className="flex flex-col gap-2 text-left">
+            <input name="userId" defaultValue={id} hidden />
             <div>For ...</div>
             <Input
                 name="context"
@@ -88,7 +94,9 @@ export const FormInput = () => {
                 </Button>
             )}
             <input name="size" value={size} readOnly hidden />
-            <Button type="submit">Submit</Button>
+            <Button type="submit">
+                {pending ? <IconLoading /> : "Submit"}
+            </Button>
             {!state.success && (
                 <div className="text-red-500 transition-opacity duration-500 opacity-100">
                     {state?.message}

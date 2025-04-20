@@ -50,7 +50,7 @@ export async function searchFood(query) {
         }
 
         const data = await response.json();
-        console.log(data);
+
         if (!data.foods || !data.foods.food) {
             return null;
         }

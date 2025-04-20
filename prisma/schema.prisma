@@ -33,10 +33,9 @@ model Session {
 
 model Input {
   id String @id @default(cuid())
-  title String
-  type String
-  image String
-  meals Json
+  context String
+  foods Json
+  date String
   createdAt DateTime @default(now())
 
   userId String
@@ -47,9 +46,11 @@ model Input {
 
 model Result {
   id String @id @default(cuid())
-  normalized Json
+  totalNutrition Json
   nutritions Json
   insight String
+  recommendations Json
+  date String
   createdAt DateTime @default(now())
 
   userId String
