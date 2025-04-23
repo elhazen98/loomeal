@@ -18,8 +18,8 @@ export default async function Layout({ children }) {
     };
 
     return (
-        <div className="flex justify-center h-screen">
-            <div className="flex flex-col items-center max-w-[400px] w-full">
+        <div className="flex justify-center">
+            <div className="flex flex-col items-center max-w-[400px] min-h-screen w-full">
                 <Header
                     id={user.id}
                     username={user.username}

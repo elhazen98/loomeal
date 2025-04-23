@@ -1,27 +1,15 @@
 import { Button } from "@/components/ui/button";
-import { UserCard } from "./components/user-card";
+import { UserCard } from "./components/user-info";
 import Link from "next/link";
 import { IconFolder, IconPlus } from "@/components/ui/icons";
-import { RecordChart } from "./components/chart";
-import { TodayRecord } from "./components/today-card";
+import { RecordChart } from "./components/last-week-record";
+import { TodayRecord } from "./components/today-record";
+import { dailyCounter } from "@/lib/daily-counter";
+import { weeklyCounter } from "@/lib/weekly-counter";
 
-export default function Page() {
-    const todayRecord = {
-        calories: 129,
-        fat: 10,
-        carbs: 24.3,
-        protein: 16.06,
-    };
-
-    const previousRecord = [
-        { date: "11/12", calories: 325 },
-        { date: "12/12", calories: 212 },
-        { date: "13/12", calories: 449 },
-        { date: "14/12", calories: 284 },
-        { date: "15/12", calories: 332 },
-        { date: "16/12", calories: 521 },
-        { date: "17/12", calories: 325 },
-    ];
+export default async function Page() {
+    const todayRecord = await dailyCounter();
+    const previousRecord = await weeklyCounter();
 
     const averageCalories = Math.round(
         previousRecord.reduce((sum, record) => sum + record.calories, 0) /

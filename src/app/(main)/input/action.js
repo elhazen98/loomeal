@@ -7,11 +7,11 @@ import { redirect } from "next/navigation";
 import { systemPrompt } from "@/lib/prompt";
 import { prisma } from "@/util/prisma";
 import { createId } from "@paralleldrive/cuid2";
+import { roundTwoDec } from "@/lib/utils";
 
 export async function getDataAction(_, formData) {
     const inputId = createId();
     const resultId = createId();
-    const today = new Date();
     const userId = formData.get("userId");
     const size = formData.get("size");
     const context = formData.get("context");
@@ -25,12 +25,9 @@ export async function getDataAction(_, formData) {
         };
     }
 
-    const inputs = { context, foods };
-
     for (let index = 0; index < size; index++) {
-        let food = formData.get(`food${index}`);
+        const food = formData.get(`food${index}`);
         const portion = formData.get(`portion${index}`);
-        let serving = null;
 
         if (!food) {
             return {
@@ -45,6 +42,14 @@ export async function getDataAction(_, formData) {
                 message: "Food portion should be filled",
             };
         }
+    }
+
+    const inputs = { context, foods };
+
+    for (let index = 0; index < size; index++) {
+        let food = formData.get(`food${index}`);
+        const portion = formData.get(`portion${index}`);
+        let serving = null;
 
         foodsOriginal.push({ food: food, portion: portion });
 
@@ -87,12 +92,6 @@ export async function getDataAction(_, formData) {
             userId: userId,
             context: context,
             foods: foodsOriginal,
-            date: today.toLocaleDateString("en-CA", {
-                weekday: "long",
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-            }),
         },
     });
 
@@ -117,13 +116,13 @@ export async function getDataAction(_, formData) {
         const parsed = JSON.parse(cleaned);
 
         const totalNutrition = {
-            calories: { amount: 0, unit: "kcal" },
-            carbohydrate: { amount: 0, unit: "g" },
-            protein: { amount: 0, unit: "g" },
-            fat: { amount: 0, unit: "g" },
-            cholesterol: { amount: 0, unit: "mg" },
-            fiber: { amount: 0, unit: "g" },
-            sugar: { amount: 0, unit: "g" },
+            calories: { amount: 0.0, unit: "kcal" },
+            carbohydrate: { amount: 0.0, unit: "g" },
+            protein: { amount: 0.0, unit: "g" },
+            fat: { amount: 0.0, unit: "g" },
+            cholesterol: { amount: 0.0, unit: "mg" },
+            fiber: { amount: 0.0, unit: "g" },
+            sugar: { amount: 0.0, unit: "g" },
         };
 
         parsed.per_food_breakdown.map((food) => {
@@ -136,8 +135,22 @@ export async function getDataAction(_, formData) {
             totalNutrition.sugar.amount += food.sugar.amount;
         });
 
-        console.log("Parsed:", parsed);
-        console.log(parsed.per_food_breakdown);
+        totalNutrition.calories.amount = roundTwoDec(
+            totalNutrition.calories.amount
+        );
+        totalNutrition.carbohydrate.amount = roundTwoDec(
+            totalNutrition.carbohydrate.amount
+        );
+        totalNutrition.protein.amount = roundTwoDec(
+            totalNutrition.protein.amount
+        );
+        totalNutrition.fat.amount = roundTwoDec(totalNutrition.fat.amount);
+        totalNutrition.cholesterol.amount = roundTwoDec(
+            totalNutrition.cholesterol.amount
+        );
+        totalNutrition.fiber.amount = roundTwoDec(totalNutrition.fiber.amount);
+        totalNutrition.sugar.amount = roundTwoDec(totalNutrition.sugar.amount);
+
         console.log(totalNutrition);
 
         await prisma.result.create({
@@ -149,12 +162,6 @@ export async function getDataAction(_, formData) {
                 nutritions: parsed.per_food_breakdown,
                 insight: parsed.insight,
                 recommendations: parsed.recommendations,
-                date: today.toLocaleDateString("en-CA", {
-                    weekday: "long",
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                }),
             },
         });
     } catch (e) {

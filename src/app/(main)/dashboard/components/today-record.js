@@ -2,9 +2,9 @@ export const TodayRecord = ({ todayRecord }) => {
     const { calories, fat, carbs, protein } = todayRecord;
 
     const totalGram = fat + carbs + protein;
-    const fatPercentage = fat / totalGram;
-    const carbsPercentage = carbs / totalGram;
-    const proteinPercentage = protein / totalGram;
+    const fatPercentage = totalGram ? fat / totalGram : 0;
+    const carbsPercentage = totalGram ? carbs / totalGram : 0;
+    const proteinPercentage = totalGram ? protein / totalGram : 0;
 
     return (
         <div className="w-full text-left">
@@ -19,7 +19,11 @@ export const TodayRecord = ({ todayRecord }) => {
                 </div>
                 <div className="flex text-xs gap-1 font-bold">
                     <div
-                        style={{ width: `${fatPercentage * 100}%` }}
+                        style={{
+                            width: `${
+                                totalGram ? fatPercentage * 100 : 33.33
+                            }%`,
+                        }}
                         className="flex flex-col text-center gap-1"
                     >
                         <div>Fat {Math.round(fatPercentage * 100)}%</div>
@@ -28,7 +32,11 @@ export const TodayRecord = ({ todayRecord }) => {
                         </div>
                     </div>
                     <div
-                        style={{ width: `${carbsPercentage * 100}%` }}
+                        style={{
+                            width: `${
+                                totalGram ? carbsPercentage * 100 : 33.33
+                            }%`,
+                        }}
                         className="flex flex-col text-center gap-1"
                     >
                         Carbs {Math.round(carbsPercentage * 100)}%
@@ -37,7 +45,11 @@ export const TodayRecord = ({ todayRecord }) => {
                         </div>
                     </div>
                     <div
-                        style={{ width: `${proteinPercentage * 100}%` }}
+                        style={{
+                            width: `${
+                                totalGram ? proteinPercentage * 100 : 33.33
+                            }%`,
+                        }}
                         className="flex flex-col text-center gap-1"
                     >
                         Protein {Math.round(proteinPercentage * 100)}%

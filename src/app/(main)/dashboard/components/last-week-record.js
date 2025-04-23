@@ -23,7 +23,8 @@ export const RecordChart = ({ previousRecord }) => {
                     dataKey="date"
                     tickLine={false}
                     tickMargin={10}
-                    axisLine={false}
+                    axisLine={{ stroke: "var(--secondary)", strokeWidth: 2 }}
+                    tickFormatter={(value) => value.slice(0, 4)}
                 />
                 <ChartTooltip content={<ChartTooltipContent />} />
                 <Bar dataKey="calories" fill="var(--secondary)" radius={6} />
