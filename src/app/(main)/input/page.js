@@ -8,7 +8,7 @@ import { getDataAction } from "./action";
 import { useUser } from "../components/user-provider";
 
 export default function Page() {
-    const { id } = useUser();
+    const { id, sex, age, userContext } = useUser();
     const [state, formAction, pending] = useActionState(getDataAction, {});
     const [context, setContext] = useState("");
     const [foods, setFoods] = useState([{ food: "", portion: "" }]);
@@ -37,23 +37,42 @@ export default function Page() {
     };
 
     return (
-        <div className="p-4 w-full h-full py-[calc(100vh/5)]">
+        <div className="w-full h-full">
+            <div className="text-2xl text-left font-bold mb-8">
+                Record A Meal
+            </div>
             <form action={formAction} className="flex flex-col gap-2 text-left">
                 <input name="userId" defaultValue={id} hidden />
-                <div>For ...</div>
+                <input name="userSex" defaultValue={sex} hidden />
+                <input name="userAge" defaultValue={age} hidden />
+                <input name="userContext" defaultValue={userContext} hidden />
+                <div>
+                    <div className="font-bold">
+                        {"Tell Us What You're Eating"}
+                    </div>
+                    <div className="text-sm text-primary/50">
+                        {"Helps us understand the purpose of your meal."}
+                    </div>
+                </div>
                 <Input
+                    className="mb-8"
                     name="context"
-                    placeholder="Breakfast, Pre-Workout, Sahoor, etc."
+                    placeholder="Meal Context. (e.g., breakfast, pre-workout)"
                     value={context}
                     onChange={(e) => handleContext(e.target.value)}
                 />
-                <div>I Eat ...</div>
+                <div>
+                    <div className="font-bold">{"What's on Your Plate?"}</div>
+                    <div className="text-sm text-primary/50">
+                        {"Add the food items you're about to eat, one by one."}
+                    </div>
+                </div>
                 {foods.map((item, index) => (
                     <div className="relative" key={index}>
                         <div className="grid grid-rows-1 grid-cols-3 gap-2">
                             <Input
                                 name={`food${index}`}
-                                placeholder={`Food`}
+                                placeholder="Food Name"
                                 value={item.food}
                                 onChange={(e) =>
                                     handleChange(index, "food", e.target.value)
@@ -62,7 +81,7 @@ export default function Page() {
                             />
                             <Input
                                 name={`portion${index}`}
-                                placeholder={`Portion`}
+                                placeholder="Portion"
                                 value={item.portion}
                                 onChange={(e) =>
                                     handleChange(
@@ -99,11 +118,11 @@ export default function Page() {
                     </Button>
                 )}
                 <input name="size" value={size} readOnly hidden />
-                <Button type="submit">
+                <Button type="submit" className="mt-8">
                     {pending ? <IconLoading /> : "Submit"}
                 </Button>
                 {!state.success && (
-                    <div className="text-red-500 transition-opacity duration-500 opacity-100">
+                    <div className="text-chart-3 transition-opacity duration-500 opacity-100 text-center">
                         {state?.message}
                     </div>
                 )}

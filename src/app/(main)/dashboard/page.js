@@ -17,8 +17,8 @@ export default async function Page() {
     );
 
     return (
-        <div className="flex flex-col justify-center items-center h-full w-full gap-12">
-            <div className="flex flex-col justify-center items-center gap-4">
+        <div className="flex flex-col h-full w-full gap-8">
+            <div className="flex flex-col justify-center items-center gap-8">
                 <UserCard />
                 <TodayRecord todayRecord={todayRecord} />
                 <Link href="/input" className="w-full">
@@ -27,7 +27,7 @@ export default async function Page() {
                     </Button>
                 </Link>
             </div>
-            <div className="flex flex-col justify-center items-center gap-4 w-full">
+            <div className="flex flex-col justify-center items-center gap-8 w-full">
                 <div className="flex flex-col justify-center items-center gap-2 w-full">
                     <div className="w-full text-right flex justify-between">
                         <div className="text-left w-full">

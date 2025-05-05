@@ -28,12 +28,22 @@ export default async function Page({ params }) {
     const nutritions = result.nutritions;
     const insight = result.insight;
     const recommendations = result.recommendations;
+    const score = result.score;
 
     return (
         <div className="my-20 flex flex-col gap-8 text-left text-sm">
-            <div className="">
-                <div className="font-bold text-2xl">{capitalize(context)}</div>
-                <div>{date}</div>
+            <div className="flex justify-between items-center">
+                <div className="">
+                    <div className="font-bold text-2xl">
+                        {capitalize(context)}
+                    </div>
+                    <div>{date}</div>
+                </div>
+                <div className="text-5xl">
+                    {score === 1 && "👎"}
+                    {score === 2 && "👌"}
+                    {score === 3 && "👍"}
+                </div>
             </div>
             <TotalNutrition totalNutrition={totalNutrition} />
             <div className="flex flex-col gap-2">
