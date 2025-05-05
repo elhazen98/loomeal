@@ -16,6 +16,7 @@ export default async function Page() {
                 id: true,
                 createdAt: true,
                 totalNutrition: true,
+                score: true,
                 input: {
                     select: {
                         context: true,
@@ -54,7 +55,7 @@ export default async function Page() {
     ).sort((a, b) => b.timestamp - a.timestamp);
 
     return (
-        <div className="my-20 w-full text-left">
+        <div className="w-full text-left">
             <div className="font-bold text-2xl pb-4">Your Previous Record</div>
             <div className="flex flex-col gap-6">
                 {groupByDate.map((group) => (
@@ -68,8 +69,16 @@ export default async function Page() {
                                         className="w-full"
                                     >
                                         <Button
-                                            className="w-full justify-between"
-                                            variant="secondary"
+                                            className={`w-full justify-between text-primary ${
+                                                result.score === 1 &&
+                                                "bg-chart-1 hover:bg-chart-1/80"
+                                            } ${
+                                                result.score === 2 &&
+                                                "bg-chart-2 hover:bg-chart-2/80"
+                                            } ${
+                                                result.score === 3 &&
+                                                "bg-secondary hover:bg-secondary/80"
+                                            }`}
                                         >
                                             <div>
                                                 {capitalize(

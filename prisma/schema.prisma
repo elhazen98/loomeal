@@ -12,6 +12,9 @@ model User {
   name String
   email String @unique
   password String?
+  sex String?
+  age Int?
+  userContext String?
   createdAt DateTime @default(now())
   updateAt DateTime @updatedAt
 
@@ -49,6 +52,7 @@ model Result {
   nutritions Json
   insight String
   recommendations Json
+  score Int
   createdAt DateTime @default(now())
 
   userId String

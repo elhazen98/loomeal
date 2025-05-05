@@ -1,6 +1,11 @@
 export const TodayRecord = ({ todayRecord }) => {
     const { calories, fat, carbs, protein } = todayRecord;
 
+    // const calories = 1000;
+    // const fat = 50;
+    // const carbs = 44;
+    // const protein = 6;
+
     const totalGram = fat + carbs + protein;
     const fatPercentage = totalGram ? fat / totalGram : 0;
     const carbsPercentage = totalGram ? carbs / totalGram : 0;
@@ -9,27 +14,52 @@ export const TodayRecord = ({ todayRecord }) => {
     return (
         <div className="w-full text-left">
             <p className="opacity-50 text-sm mb-2">Your Record Today</p>
-            <div className="gap-2">
-                <div className="w-full p-4 items-center text-center">
-                    <div className="w-full">
-                        <div className="text-5xl font-bold">
-                            {calories} kcal
+            <div>
+                <div className="w-full flex gap-2 justify-around mb-2 mt-4">
+                    <div className="flex flex-col text-center">
+                        <div className="text-5xl font-bold">{calories}</div>
+                        <p>kilocalories (kcal)</p>
+                    </div>
+                    <div className="flex flex-col justify-center text-sm">
+                        <div className="flex items-center gap-2">
+                            <div className="bg-chart-1 h-2 w-2 rounded-full"></div>
+                            <div>
+                                Fat <span className="font-bold">{fat}g</span>
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <div className="bg-chart-2 h-2 w-2 rounded-full"></div>
+                            <div>
+                                Carbs{" "}
+                                <span className="font-bold">{carbs} g</span>
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <div className="bg-chart-3 h-2 w-2 rounded-full"></div>
+                            <div>
+                                Protein{" "}
+                                <span className="font-bold">{protein} g</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div className="flex text-xs gap-1 font-bold">
+                <div className="flex gap-1 h-6 text-xs">
                     <div
                         style={{
                             width: `${
                                 totalGram ? fatPercentage * 100 : 33.33
                             }%`,
                         }}
-                        className="flex flex-col text-center gap-1"
+                        className="flex bg-chart-1 rounded-sm justify-center items-center"
                     >
-                        <div>Fat {Math.round(fatPercentage * 100)}%</div>
-                        <div className="bg-chart-1 w-full text-card-foreground rounded-lg p-1 text-sm">
-                            {fat} g
-                        </div>
+                        {(fatPercentage >= 0.07 && (
+                            <div className="z-50 font-bold">
+                                {Math.round(fatPercentage * 100)}%
+                            </div>
+                        )) ||
+                            (totalGram === 0 && (
+                                <div className="z-50 font-bold">0%</div>
+                            ))}
                     </div>
                     <div
                         style={{
@@ -37,12 +67,16 @@ export const TodayRecord = ({ todayRecord }) => {
                                 totalGram ? carbsPercentage * 100 : 33.33
                             }%`,
                         }}
-                        className="flex flex-col text-center gap-1"
+                        className="flex bg-chart-2 rounded-sm justify-center items-center"
                     >
-                        Carbs {Math.round(carbsPercentage * 100)}%
-                        <div className="bg-chart-2 w-full text-card-foreground rounded-lg p-1 text-sm">
-                            {carbs} g
-                        </div>
+                        {(carbsPercentage >= 0.07 && (
+                            <div className="z-50 font-bold">
+                                {Math.round(carbsPercentage * 100)}%
+                            </div>
+                        )) ||
+                            (totalGram === 0 && (
+                                <div className="z-50 font-bold">0%</div>
+                            ))}
                     </div>
                     <div
                         style={{
@@ -50,12 +84,16 @@ export const TodayRecord = ({ todayRecord }) => {
                                 totalGram ? proteinPercentage * 100 : 33.33
                             }%`,
                         }}
-                        className="flex flex-col text-center gap-1"
+                        className="flex flex-col bg-chart-3 rounded-sm justify-center items-center"
                     >
-                        Protein {Math.round(proteinPercentage * 100)}%
-                        <div className="bg-chart-3 text-card-foreground rounded-lg p-1 text-sm">
-                            {protein} g
-                        </div>
+                        {(proteinPercentage >= 0.07 && (
+                            <div className="z-50 font-bold">
+                                {Math.round(proteinPercentage * 100)}%
+                            </div>
+                        )) ||
+                            (totalGram === 0 && (
+                                <div className="z-50 font-bold">0%</div>
+                            ))}
                     </div>
                 </div>
             </div>

@@ -8,11 +8,15 @@ import { systemPrompt } from "@/lib/prompt";
 import { prisma } from "@/util/prisma";
 import { createId } from "@paralleldrive/cuid2";
 import { roundTwoDec } from "@/lib/utils";
+import { ParametersLoader } from "oauth-signature";
 
 export async function getDataAction(_, formData) {
     const inputId = createId();
     const resultId = createId();
     const userId = formData.get("userId");
+    const userSex = formData.get("userSex");
+    const userAge = formData.get("userAge");
+    const userContext = formData.get("userContext");
     const size = formData.get("size");
     const context = formData.get("context");
     const foodsOriginal = [];
@@ -21,7 +25,7 @@ export async function getDataAction(_, formData) {
     if (!context) {
         return {
             success: false,
-            message: "What do you eat for?",
+            message: "Meal context can't be blank",
         };
     }
 
@@ -32,7 +36,7 @@ export async function getDataAction(_, formData) {
         if (!food) {
             return {
                 success: false,
-                message: "Food name should be defined",
+                message: "Food name can't be blank",
             };
         }
 
@@ -44,7 +48,13 @@ export async function getDataAction(_, formData) {
         }
     }
 
-    const inputs = { context, foods };
+    const inputs = {
+        userSex,
+        userAge,
+        userContext,
+        context,
+        foods,
+    };
 
     for (let index = 0; index < size; index++) {
         let food = formData.get(`food${index}`);
@@ -151,8 +161,6 @@ export async function getDataAction(_, formData) {
         totalNutrition.fiber.amount = roundTwoDec(totalNutrition.fiber.amount);
         totalNutrition.sugar.amount = roundTwoDec(totalNutrition.sugar.amount);
 
-        console.log(totalNutrition);
-
         await prisma.result.create({
             data: {
                 id: resultId,
@@ -162,6 +170,7 @@ export async function getDataAction(_, formData) {
                 nutritions: parsed.per_food_breakdown,
                 insight: parsed.insight,
                 recommendations: parsed.recommendations,
+                score: parsed.score,
             },
         });
     } catch (e) {

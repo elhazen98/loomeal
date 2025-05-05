@@ -6,6 +6,9 @@ export const UserContext = createContext({
     id: "",
     username: "",
     email: "",
+    sex: "",
+    age: 0,
+    UserContext: "",
 });
 
 export default function UserProvider({ user, children }) {
