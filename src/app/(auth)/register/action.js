@@ -40,12 +40,5 @@ export async function registerAction(_, formData) {
         },
     });
 
-    setTimeout(() => {
-        redirect("/login");
-    }, 1000);
-
-    return {
-        success: true,
-        message: "Account registered!",
-    };
+    redirect("/signin");
 }

@@ -3,8 +3,8 @@ export const Nutrition = ({ nutritions }) => {
         <div className="text-left flex flex-col gap-2">
             <div className="font-bold text-lg">Nutrition Breakdown</div>
             <div className="flex flex-col gap-4">
-                {nutritions.map((food) => (
-                    <div key={food.food}>
+                {nutritions.map((food, index) => (
+                    <div key={index}>
                         <div className="font-bold flex justify-between">
                             <div>{food.food}</div>
                             <div>{food.portion}</div>

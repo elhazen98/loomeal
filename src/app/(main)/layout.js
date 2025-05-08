@@ -12,6 +12,7 @@ export default async function Layout({ children }) {
     }
 
     const user = {
+        sessionId: session.id,
         id: session.user.id,
         username: session.user.name,
         email: session.user.email,

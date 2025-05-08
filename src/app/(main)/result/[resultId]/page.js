@@ -1,11 +1,15 @@
-import { capitalize, roundTwoDec } from "@/lib/utils";
+import { capitalize } from "@/lib/utils";
 import { prisma } from "@/util/prisma";
 import { TotalNutrition } from "./components/total-nutrition";
 import { Nutrition } from "./components/nutrition";
-import { createId } from "@paralleldrive/cuid2";
 
 export default async function Page({ params }) {
     const { resultId } = await params;
+
+    if (!resultId) {
+        return <div>XXX</div>;
+    }
+
     const result = await prisma.result.findUnique({
         where: { id: resultId },
         include: {
@@ -16,6 +20,10 @@ export default async function Page({ params }) {
             },
         },
     });
+
+    if (!result) {
+        return <div>XXX</div>;
+    }
 
     const date = result.createdAt.toLocaleDateString("en-CA", {
         weekday: "long",
@@ -53,12 +61,12 @@ export default async function Page({ params }) {
             <div className="flex flex-col gap-2">
                 <div className="font-bold text-lg">Recommendations</div>
                 <ol className="list-decimal text-justify">
-                    {recommendations.map((recommendation) => (
-                        <li key={createId()}>{recommendation}</li>
+                    {recommendations.map((recommendation, index) => (
+                        <li key={index}>{recommendation}</li>
                     ))}
                 </ol>
             </div>
-            <Nutrition nutritions={nutritions} key={createId()} />
+            <Nutrition nutritions={nutritions} />
         </div>
     );
 }

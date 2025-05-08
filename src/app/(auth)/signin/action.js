@@ -53,10 +53,5 @@ export async function signinAction(_, formData) {
         sameSite: "lax",
     });
 
-    return {
-        success: true,
-        message: "Sign in success",
-    };
-
-    redirect("/input");
+    redirect("/dashboard");
 }
