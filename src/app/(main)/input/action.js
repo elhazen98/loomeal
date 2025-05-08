@@ -8,7 +8,6 @@ import { systemPrompt } from "@/lib/prompt";
 import { prisma } from "@/util/prisma";
 import { createId } from "@paralleldrive/cuid2";
 import { roundTwoDec } from "@/lib/utils";
-import { ParametersLoader } from "oauth-signature";
 
 export async function getDataAction(_, formData) {
     const inputId = createId();
@@ -161,7 +160,7 @@ export async function getDataAction(_, formData) {
         totalNutrition.fiber.amount = roundTwoDec(totalNutrition.fiber.amount);
         totalNutrition.sugar.amount = roundTwoDec(totalNutrition.sugar.amount);
 
-        await prisma.result.create({
+        const created = await prisma.result.create({
             data: {
                 id: resultId,
                 userId: userId,
@@ -173,9 +172,16 @@ export async function getDataAction(_, formData) {
                 score: parsed.score,
             },
         });
+
+        if (created) {
+            redirect(`/result/${resultId}`);
+        } else {
+            return {
+                success: false,
+                message: "An error occurred while saving food.",
+            };
+        }
     } catch (e) {
         console.error(e.message);
     }
-
-    redirect(`/result/${resultId}`);
 }

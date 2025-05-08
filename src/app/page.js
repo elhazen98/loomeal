@@ -1,9 +1,9 @@
-import { Parkinsans } from "next/font/google";
 import { Button } from "@/components/ui/button";
 import { Header } from "./components/header";
 import { Footer } from "./components/footer";
 import Image from "next/image";
 import Link from "next/link";
+import { Parkinsans } from "next/font/google";
 
 const parkinsans = Parkinsans({
     subsets: ["latin"],
