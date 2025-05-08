@@ -24,10 +24,9 @@ export default async function Layout({ children }) {
         <div className="flex justify-center">
             <div className="flex flex-col items-center max-w-[400px] min-h-screen w-full gap-8">
                 <Header username={user.username} />
-                <div className="flex-1 justify-center w-4/5 items-center text-center">
+                <div className="flex-1 justify-center w-4/5 items-center text-center pb-24">
                     <UserProvider user={user}>{children}</UserProvider>
                 </div>
-                <div className="h-12"></div>
                 <div className="fixed max-w-[400px] w-full bottom-0 z-50">
                     <BottomNavbar />
                 </div>

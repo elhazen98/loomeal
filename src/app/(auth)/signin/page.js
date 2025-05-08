@@ -15,7 +15,7 @@ export default function Page() {
     return (
         <div className="flex justify-center">
             <div className="max-w-[400px] w-full">
-                <main className="h-screen flex flex-col justify-center items-center">
+                <main className="h-screen flex flex-col items-center pt-24">
                     <div className="w-4/5 pb-8">
                         <Image
                             width={50}

@@ -3,6 +3,7 @@ import { prisma } from "@/util/prisma";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { capitalize } from "@/lib/utils";
+import { IconDislike, IconLike, IconOk } from "@/components/ui/icons";
 
 export default async function Page() {
     const session = await auth();
@@ -71,24 +72,29 @@ export default async function Page() {
                                         className="w-full"
                                     >
                                         <Button
-                                            className={`w-full justify-between text-primary ${
-                                                result.score === 1 &&
-                                                "bg-chart-3 hover:bg-chart-3/80"
-                                            } ${
-                                                result.score === 2 &&
-                                                "bg-chart-2 hover:bg-chart-2/80"
-                                            } ${
-                                                result.score === 3 &&
-                                                "bg-chart-1 hover:bg-chart-1/80"
-                                            }`}
+                                            className="w-full justify-between"
+                                            variant="secondary"
                                         >
                                             <div>
                                                 {capitalize(
                                                     result.input.context
                                                 )}
                                             </div>
-                                            <div>
-                                                {`${result.totalNutrition.calories.amount} Kcal`}
+                                            <div className="flex gap-2 items-center">
+                                                <div>
+                                                    {`${result.totalNutrition.calories.amount} Kcal`}
+                                                </div>
+                                                <div>
+                                                    {result.score === 1 && (
+                                                        <IconDislike />
+                                                    )}
+                                                    {result.score === 2 && (
+                                                        <IconOk />
+                                                    )}
+                                                    {result.score === 3 && (
+                                                        <IconLike />
+                                                    )}
+                                                </div>
                                             </div>
                                         </Button>
                                     </Link>
