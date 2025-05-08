@@ -9,16 +9,23 @@ import { DeleteResultButton } from "./components/delete-button";
 export default async function Page({ params }) {
     const { resultId } = await params;
 
-    const result = await prisma.result.findUnique({
-        where: { id: resultId },
-        include: {
-            input: {
-                select: {
-                    context: true,
+    let result = null;
+    let retry = 3;
+
+    while (retry > 0 && !result) {
+        result = await prisma.result.findUnique({
+            where: { id: resultId },
+            include: {
+                input: {
+                    select: {
+                        context: true,
+                    },
                 },
             },
-        },
-    });
+        });
+        if (!result) await new Promise((r) => setTimeout(r, 100)); // tunggu 300ms
+        retry--;
+    }
 
     if (!result) {
         return <NoResult />;
@@ -38,7 +45,7 @@ export default async function Page({ params }) {
     const score = result.score;
 
     return (
-        <div className="flex flex-col gap-8 text-left text-sm">
+        <div className="flex flex-col gap-4 text-left text-sm">
             <div className="flex justify-between items-center">
                 <div className="">
                     <div className="font-extrabold text-2xl">
@@ -53,17 +60,21 @@ export default async function Page({ params }) {
                 </div>
             </div>
             <TotalNutrition totalNutrition={totalNutrition} />
-            <div className="flex flex-col gap-2">
-                <div className="font-bold text-lg">Insight</div>
-                <div className="text-sm text-justify">{insight}</div>
+            <div className="p-4 bg-chart-2 rounded-xl">
+                <div className="flex flex-col gap-2">
+                    <div className="font-bold text-lg">Insight</div>
+                    <div className="text-sm text-justify">{insight}</div>
+                </div>
             </div>
-            <div className="flex flex-col gap-2">
-                <div className="font-bold text-lg">Recommendations</div>
-                <ol className="list-decimal text-justify">
-                    {recommendations.map((recommendation, index) => (
-                        <li key={index}>{recommendation}</li>
-                    ))}
-                </ol>
+            <div className="p-4 bg-chart-3 rounded-xl">
+                <div className="flex flex-col gap-2">
+                    <div className="font-bold text-lg">Recommendations</div>
+                    <ol className="list-disc list-inside text-justify">
+                        {recommendations.map((recommendation, index) => (
+                            <li key={index}>{recommendation}</li>
+                        ))}
+                    </ol>
+                </div>
             </div>
             <Nutrition nutritions={nutritions} />
             <DeleteResultButton resultId={resultId} />
