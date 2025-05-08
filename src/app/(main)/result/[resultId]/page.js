@@ -2,13 +2,12 @@ import { capitalize } from "@/lib/utils";
 import { prisma } from "@/util/prisma";
 import { TotalNutrition } from "./components/total-nutrition";
 import { Nutrition } from "./components/nutrition";
+import { NoResult } from "./components/no-result";
+import { IconDislike, IconLike, IconOk } from "@/components/ui/icons";
+import { DeleteResultButton } from "./components/delete-button";
 
 export default async function Page({ params }) {
     const { resultId } = await params;
-
-    if (!resultId) {
-        return <div>XXX</div>;
-    }
 
     const result = await prisma.result.findUnique({
         where: { id: resultId },
@@ -22,7 +21,7 @@ export default async function Page({ params }) {
     });
 
     if (!result) {
-        return <div>XXX</div>;
+        return <NoResult />;
     }
 
     const date = result.createdAt.toLocaleDateString("en-CA", {
@@ -39,18 +38,18 @@ export default async function Page({ params }) {
     const score = result.score;
 
     return (
-        <div className="my-20 flex flex-col gap-8 text-left text-sm">
+        <div className="flex flex-col gap-8 text-left text-sm">
             <div className="flex justify-between items-center">
                 <div className="">
-                    <div className="font-bold text-2xl">
+                    <div className="font-extrabold text-2xl">
                         {capitalize(context)}
                     </div>
                     <div>{date}</div>
                 </div>
                 <div className="text-5xl">
-                    {score === 1 && "👎"}
-                    {score === 2 && "👌"}
-                    {score === 3 && "👍"}
+                    {score === 1 && <IconDislike />}
+                    {score === 2 && <IconOk />}
+                    {score === 3 && <IconLike />}
                 </div>
             </div>
             <TotalNutrition totalNutrition={totalNutrition} />
@@ -67,6 +66,7 @@ export default async function Page({ params }) {
                 </ol>
             </div>
             <Nutrition nutritions={nutritions} />
+            <DeleteResultButton resultId={resultId} />
         </div>
     );
 }

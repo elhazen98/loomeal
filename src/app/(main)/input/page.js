@@ -38,7 +38,7 @@ export default function Page() {
 
     return (
         <div className="w-full h-full">
-            <div className="text-2xl text-left font-bold mb-8">
+            <div className="text-2xl text-left font-extrabold mb-8">
                 Record A Meal
             </div>
             <form action={formAction} className="flex flex-col gap-2 text-left">
@@ -122,7 +122,7 @@ export default function Page() {
                     {pending ? <IconLoading /> : "Submit"}
                 </Button>
                 {!state.success && (
-                    <div className="text-chart-3 transition-opacity duration-500 opacity-100 text-center">
+                    <div className="text-red-500 transition-opacity duration-500 opacity-100 text-center">
                         {state?.message}
                     </div>
                 )}

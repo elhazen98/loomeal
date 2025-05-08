@@ -20,7 +20,7 @@ export default function Page() {
                         <Image
                             width={50}
                             height={50}
-                            src="loomeal.svg"
+                            src="/loomeal.svg"
                             alt="loomeal.svg"
                             className="hover:rotate-180 duration-200"
                         />
