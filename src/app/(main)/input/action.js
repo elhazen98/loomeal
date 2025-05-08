@@ -173,15 +173,18 @@ export async function getDataAction(_, formData) {
             },
         });
 
-        if (created) {
-            redirect(`/result/${resultId}`);
-        } else {
+        if (!created) {
             return {
                 success: false,
                 message: "An error occurred while saving food.",
             };
         }
     } catch (e) {
-        console.error(e.message);
+        return {
+            success: false,
+            message: e.message,
+        };
     }
+
+    redirect(`/result/${resultId}`);
 }

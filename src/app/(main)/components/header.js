@@ -8,7 +8,7 @@ export const Header = ({ username }) => {
                 <Image
                     width={22}
                     height={22}
-                    src="loomeal.svg"
+                    src="/loomeal.svg"
                     alt="loomeal.svg"
                     className="hover:rotate-180 duration-200"
                 />
