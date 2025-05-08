@@ -56,7 +56,9 @@ export default async function Page() {
 
     return (
         <div className="w-full text-left">
-            <div className="font-bold text-2xl pb-4">Your Previous Record</div>
+            <div className="font-extrabold text-2xl pb-4">
+                Your Previous Record
+            </div>
             <div className="flex flex-col gap-6">
                 {groupByDate.map((group) => (
                     <div className="text-left w-full" key={group.date}>
@@ -71,13 +73,13 @@ export default async function Page() {
                                         <Button
                                             className={`w-full justify-between text-primary ${
                                                 result.score === 1 &&
-                                                "bg-chart-1 hover:bg-chart-1/80"
+                                                "bg-chart-3 hover:bg-chart-3/80"
                                             } ${
                                                 result.score === 2 &&
                                                 "bg-chart-2 hover:bg-chart-2/80"
                                             } ${
                                                 result.score === 3 &&
-                                                "bg-secondary hover:bg-secondary/80"
+                                                "bg-chart-1 hover:bg-chart-1/80"
                                             }`}
                                         >
                                             <div>

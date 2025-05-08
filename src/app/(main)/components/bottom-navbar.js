@@ -19,7 +19,7 @@ export const BottomNavbar = () => {
     ];
     return (
         <div className="p-2">
-            <nav className="flex justify-around items-center h-12 bg-primary w-full rounded-lg backdrop-blur-lg">
+            <nav className="flex justify-around items-center h-12 bg-primary w-full rounded-full backdrop-blur-lg">
                 {navItems.map((item) => (
                     <Link
                         key={item.href}

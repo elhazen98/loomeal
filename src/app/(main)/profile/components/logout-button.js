@@ -1,14 +1,14 @@
 "use client";
 
 import { useActionState } from "react";
-import { logoutAction } from "./logout";
+import { logoutAction } from "./logout-action";
+import { Button } from "@/components/ui/button";
 
 export const LogoutButton = () => {
     const [state, formAction, pending] = useActionState(logoutAction, null);
-
     return (
         <form action={formAction}>
-            <button>Logout</button>
+            <Button>Logout</Button>
         </form>
     );
 };
