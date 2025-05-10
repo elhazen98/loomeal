@@ -17,44 +17,38 @@ export default function Page() {
 
     useEffect(() => {
         let retries = 3;
-        let intervalId = null;
+        let isCancelled = false;
 
         const fetchStatus = async () => {
-            if (retries <= 0) {
+            if (retries <= 0 || isCancelled) {
                 setError(true);
                 setLoading(false);
-                clearInterval(intervalId);
                 return;
             }
+
             try {
                 const res = await fetch(`/api/result/${resultId}`);
                 if (!res.ok) {
                     setError(true);
                     setLoading(false);
-                    clearInterval(intervalId);
                     return;
                 }
                 const data = await res.json();
                 if (data.status === "done") {
                     setResult(data);
                     setLoading(false);
-                    clearInterval(intervalId);
-                }
-
-                if (data.status === "processing") {
+                } else if (data.status === "processing") {
                     retries--;
+                    setTimeout(fetchStatus, 3000);
                 }
             } catch (error) {
                 setError(true);
                 setLoading(false);
-                clearInterval(intervalId);
             }
         };
 
         fetchStatus();
-        intervalId = setInterval(fetchStatus, 10000);
-
-        return () => clearInterval(intervalId);
+        return () => (isCancelled = true);
     }, [resultId]);
 
     if (loading) {
