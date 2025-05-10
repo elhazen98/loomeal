@@ -1,37 +1,62 @@
+"use client";
+
 import { capitalize } from "@/lib/utils";
-import { prisma } from "@/util/prisma";
 import { TotalNutrition } from "./components/total-nutrition";
 import { Nutrition } from "./components/nutrition";
 import { NoResult } from "./components/no-result";
 import { IconDislike, IconLike, IconOk } from "@/components/ui/icons";
 import { DeleteResultButton } from "./components/delete-button";
+import { use, useEffect, useState } from "react";
 
-export default async function Page({ params }) {
-    const { resultId } = await params;
+export default function Page({ params }) {
+    const { resultId } = use(params);
+    const [result, setResult] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
 
-    let result = null;
-    let retry = 3;
+    useEffect(() => {
+        let intervalId = null;
+        const fetchStatus = async () => {
+            try {
+                const res = await fetch(`/api/result/${resultId}`);
 
-    while (retry > 0 && !result) {
-        result = await prisma.result.findUnique({
-            where: { id: resultId },
-            include: {
-                input: {
-                    select: {
-                        context: true,
-                    },
-                },
-            },
-        });
-        if (!result) await new Promise((r) => setTimeout(r, 100)); // tunggu 300ms
-        retry--;
+                if (res.status === 404) {
+                    setError(true);
+                    setLoading(false);
+                    clearInterval(intervalId);
+                    return;
+                }
+
+                const data = await res.json();
+
+                if (data.status === "done") {
+                    setResult(data);
+                    setLoading(false);
+                    clearInterval(intervalId);
+                }
+            } catch (error) {
+                setError(true);
+                setLoading(false);
+                clearInterval(intervalId);
+                return;
+            }
+        };
+
+        fetchStatus();
+        intervalId = setInterval(fetchStatus, 3000);
+
+        return () => clearInterval(intervalId);
+    }, [resultId]);
+
+    if (loading) {
+        return <div>processing ...</div>;
     }
 
-    if (!result) {
+    if (error || !result) {
         return <NoResult />;
     }
 
-    const date = result.createdAt.toLocaleDateString("en-CA", {
+    const date = new Date(result.createdAt).toLocaleDateString("en-CA", {
         weekday: "long",
         day: "numeric",
         month: "long",

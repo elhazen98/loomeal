@@ -12,7 +12,7 @@ export default async function Page() {
 
     try {
         results = await prisma.result.findMany({
-            where: { userId: userId },
+            where: { userId: userId, status: "done" },
             select: {
                 id: true,
                 createdAt: true,

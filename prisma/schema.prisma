@@ -48,12 +48,13 @@ model Input {
 
 model Result {
   id String @id @default(cuid())
-  totalNutrition Json
-  nutritions Json
-  insight String
-  recommendations Json
-  score Int
+  totalNutrition Json?
+  nutritions Json?
+  insight String?
+  recommendations Json?
+  score Int?
   createdAt DateTime @default(now())
+  status String @default("processing")
 
   userId String
   user User @relation(fields: [userId], references: [id])
