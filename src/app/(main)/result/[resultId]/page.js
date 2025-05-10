@@ -20,6 +20,12 @@ export default function Page() {
         let intervalId = null;
 
         const fetchStatus = async () => {
+            if (retries <= 0) {
+                setError(true);
+                setLoading(false);
+                clearInterval(intervalId);
+                return;
+            }
             try {
                 const res = await fetch(`/api/result/${resultId}`);
                 if (!res.ok) {
@@ -45,9 +51,7 @@ export default function Page() {
             }
         };
 
-        if (retries >= 1) {
-            fetchStatus();
-        }
+        fetchStatus();
         intervalId = setInterval(fetchStatus, 3000);
 
         return () => clearInterval(intervalId);
