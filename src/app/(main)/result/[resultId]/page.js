@@ -29,7 +29,7 @@ export default function Page() {
 
                 if (firstFetch && res.ok && data.status !== "done") {
                     firstFetch = false;
-                    timeoutId = setTimeout(poll, 5000);
+                    timeoutId = setTimeout(poll, 10000);
                     return;
                 }
 
@@ -46,7 +46,7 @@ export default function Page() {
                     setLoading(false);
                 } else if (pollCount < maxPolls) {
                     firstFetch = false;
-                    timeoutId = setTimeout(poll, 5000);
+                    timeoutId = setTimeout(poll, 10000);
                 } else {
                     setError(true);
                     setLoading(false);
