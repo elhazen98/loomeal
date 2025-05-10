@@ -16,30 +16,40 @@ export default function Page() {
     const [error, setError] = useState(false);
 
     useEffect(() => {
-        let retries = 12;
-        let isCancelled = false;
+        let pollCount = 0;
+        const maxPolls = 10;
+        let firstFetch = true;
+        let timeoutId = null;
 
-        const fetchStatus = async () => {
-            if (retries <= 0 || isCancelled) {
-                setError(true);
-                setLoading(false);
-                return;
-            }
-
+        const poll = async () => {
             try {
+                pollCount++;
                 const res = await fetch(`/api/result/${resultId}`);
-                if (!res.ok) {
+                const data = await res.json();
+
+                if (firstFetch && res.ok && data.status !== "done") {
+                    firstFetch = false;
+                    timeoutId = setTimeout(poll, 2000);
+                    return;
+                }
+
+                if (!res.ok || !data.status) {
                     setError(true);
                     setLoading(false);
                     return;
                 }
-                const data = await res.json();
+
+                console.log(data.status);
+
                 if (data.status === "done") {
                     setResult(data);
                     setLoading(false);
-                } else if (data.status === "processing") {
-                    retries--;
-                    setTimeout(fetchStatus, 5000);
+                } else if (pollCount < maxPolls) {
+                    firstFetch = false;
+                    timeoutId = setTimeout(poll, 2000);
+                } else {
+                    setError(true);
+                    setLoading(false);
                 }
             } catch (error) {
                 setError(true);
@@ -47,8 +57,11 @@ export default function Page() {
             }
         };
 
-        fetchStatus();
-        return () => (isCancelled = true);
+        poll();
+
+        return () => {
+            if (timeoutId) clearTimeout(timeoutId);
+        };
     }, [resultId]);
 
     if (loading) {
