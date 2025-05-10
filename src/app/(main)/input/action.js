@@ -67,6 +67,7 @@ export async function getDataAction(_, formData) {
             id: resultId,
             userId: userId,
             inputId: inputId,
+            status: "processing",
         },
     });
 
