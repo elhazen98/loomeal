@@ -16,7 +16,7 @@ export default function Page() {
     const [error, setError] = useState(false);
 
     useEffect(() => {
-        let retries = 3;
+        let retries = 12;
         let isCancelled = false;
 
         const fetchStatus = async () => {
@@ -39,7 +39,7 @@ export default function Page() {
                     setLoading(false);
                 } else if (data.status === "processing") {
                     retries--;
-                    setTimeout(fetchStatus, 3000);
+                    setTimeout(fetchStatus, 5000);
                 }
             } catch (error) {
                 setError(true);
