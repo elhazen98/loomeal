@@ -16,7 +16,7 @@ export default function Page() {
     const [error, setError] = useState(false);
 
     useEffect(() => {
-        let retries = 3;
+        let retries = 10;
         let intervalId = null;
 
         const fetchStatus = async () => {
