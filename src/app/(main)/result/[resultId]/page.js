@@ -24,9 +24,7 @@ export default function Page() {
         const poll = async () => {
             try {
                 pollCount++;
-                const res = await fetch(`/api/result/${resultId}`, {
-                    cache: "no-store",
-                });
+                const res = await fetch(`/api/result/${resultId}`);
                 const data = await res.json();
 
                 if (firstFetch && res.ok && data.status !== "done") {
