@@ -71,7 +71,9 @@ export async function getDataAction(_, formData) {
         },
     });
 
-    backgroundProcessing({ resultId, size, foodsOriginal, inputs });
+    setTimeout(() => {
+        backgroundProcessing({ resultId, size, foodsOriginal, inputs });
+    }, 0);
 
     redirect(`/result/${resultId}`);
 }
