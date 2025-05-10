@@ -12,10 +12,10 @@ const parkinsans = Parkinsans({
 export default async function Page() {
     return (
         <div className="flex justify-center">
-            <div className="max-w-[400px] w-full h-screen flex flex-col justify-between">
+            <div className="max-w-[400px] w-full min-h-screen flex flex-col justify-between">
                 <Header />
-                <div className="h-full pt-12">
-                    <main className="flex justify-center text-center">
+                <div className="my-12">
+                    <main className="flex justify-center text-center flex-grow">
                         <div className="flex flex-col items-center max-w-4/5 gap-10">
                             <div
                                 className={`font-bold ${parkinsans.className} text-6xl`}
