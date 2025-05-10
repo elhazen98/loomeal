@@ -8,7 +8,7 @@ export async function weeklyCounter() {
     const dateCalories = {};
 
     const previousMeal = await prisma.result.findMany({
-        where: { userId: userId },
+        where: { userId: userId, status: "done" },
         select: {
             totalNutrition: true,
             createdAt: true,
