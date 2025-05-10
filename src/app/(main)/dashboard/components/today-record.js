@@ -1,11 +1,5 @@
 export const TodayRecord = ({ todayRecord }) => {
     const { calories, fat, carbs, protein } = todayRecord;
-
-    // const calories = 1000;
-    // const fat = 50;
-    // const carbs = 44;
-    // const protein = 6;
-
     const totalGram = fat + carbs + protein;
     const fatPercentage = totalGram ? fat / totalGram : 0;
     const carbsPercentage = totalGram ? carbs / totalGram : 0;

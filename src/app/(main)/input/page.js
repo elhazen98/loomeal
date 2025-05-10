@@ -8,7 +8,7 @@ import { getDataAction } from "./action";
 import { useUser } from "../components/user-provider";
 
 export default function Page() {
-    const { id, sex, age, userContext } = useUser();
+    const { id } = useUser();
     const [state, formAction, pending] = useActionState(getDataAction, {});
     const [context, setContext] = useState("");
     const [foods, setFoods] = useState([{ food: "", portion: "" }]);
@@ -43,9 +43,6 @@ export default function Page() {
             </div>
             <form action={formAction} className="flex flex-col gap-2 text-left">
                 <input name="userId" defaultValue={id} hidden />
-                <input name="userSex" defaultValue={sex} hidden />
-                <input name="userAge" defaultValue={age} hidden />
-                <input name="userContext" defaultValue={userContext} hidden />
                 <div>
                     <div className="font-bold">
                         {"Tell Us What You're Eating"}

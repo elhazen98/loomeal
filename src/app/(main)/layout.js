@@ -15,9 +15,6 @@ export default async function Layout({ children }) {
         id: session.user.id,
         username: session.user.name,
         email: session.user.email,
-        sex: session.user.sex,
-        age: session.user.age,
-        userContext: session.user.userContext,
     };
 
     return (

@@ -1,75 +1,157 @@
-"use client";
-
-import { capitalize } from "@/lib/utils";
+import { capitalize, roundTwoDec } from "@/lib/utils";
 import { TotalNutrition } from "./components/total-nutrition";
 import { Nutrition } from "./components/nutrition";
 import { NoResult } from "./components/no-result";
 import { IconDislike, IconLike, IconOk } from "@/components/ui/icons";
 import { DeleteResultButton } from "./components/delete-button";
-import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { prisma } from "@/util/prisma";
+import { getFood, searchFood } from "@/lib/fatsecret";
+import Fuse from "fuse.js";
+import { systemPrompt } from "@/lib/prompt";
+import { openai } from "@/util/openai";
 
-export default function Page() {
-    const { resultId } = useParams();
-    const [result, setResult] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
+export default async function Page({ params }) {
+    const { resultId } = await params;
 
-    useEffect(() => {
-        let pollCount = 0;
-        const maxPolls = 10;
-        let firstFetch = true;
-        let timeoutId = null;
+    const result = await prisma.result.findUnique({
+        where: { id: resultId },
+        include: {
+            user: { select: { sex: true, age: true, userContext: true } },
+            input: { select: { context: true, foods: true } },
+        },
+    });
 
-        const poll = async () => {
-            try {
-                pollCount++;
-                const res = await fetch(`/api/result/${resultId}`);
-                const data = await res.json();
-
-                if (firstFetch && res.ok && data.status !== "done") {
-                    firstFetch = false;
-                    timeoutId = setTimeout(poll, 5000);
-                    return;
-                }
-
-                if (!res.ok || !data.status) {
-                    setError(true);
-                    setLoading(false);
-                    return;
-                }
-
-                console.log(data.status);
-
-                if (data.status === "done") {
-                    setResult(data);
-                    setLoading(false);
-                } else if (pollCount < maxPolls) {
-                    firstFetch = false;
-                    timeoutId = setTimeout(poll, 5000);
-                } else {
-                    setError(true);
-                    setLoading(false);
-                }
-            } catch (error) {
-                setError(true);
-                setLoading(false);
-            }
-        };
-
-        poll();
-
-        return () => {
-            if (timeoutId) clearTimeout(timeoutId);
-        };
-    }, [resultId]);
-
-    if (loading) {
-        return <div>processing ...</div>;
+    if (!result) {
+        return <NoResult />;
     }
 
-    if (error || !result) {
-        return <NoResult />;
+    const context = result.input.context;
+    let totalNutrition = result.totalNutrition;
+    let nutritions = result.nutritions;
+    let insight = result.insight;
+    let recommendations = result.recommendations;
+    let score = result.score;
+
+    if (result.status === "processing") {
+        const inputs = {
+            userContext: result.user.userContext,
+            userSex: result.sex,
+            userAge: result.age,
+            mealContext: result.input.context,
+            foods: [],
+        };
+
+        totalNutrition = {
+            calories: { amount: 0.0, unit: "kcal" },
+            carbohydrate: { amount: 0.0, unit: "g" },
+            protein: { amount: 0.0, unit: "g" },
+            fat: { amount: 0.0, unit: "g" },
+            cholesterol: { amount: 0.0, unit: "mg" },
+            fiber: { amount: 0.0, unit: "g" },
+            sugar: { amount: 0.0, unit: "g" },
+        };
+
+        const size = result.input.foods.length;
+
+        for (let index = 0; index < size; index++) {
+            let food = result.input.foods[index].food;
+            let portion = result.input.foods[index].portion;
+            let serving = null;
+
+            try {
+                const data = await searchFood(food);
+
+                if (data) {
+                    const fuse = new Fuse(data, {
+                        keys: ["food_name"],
+                        threshold: 0.2,
+                        includeScore: true,
+                    });
+
+                    const similar = fuse.search(food);
+                    const fixFood = similar.length ? similar[0].item : null;
+
+                    if (fixFood) {
+                        food = fixFood.food_name;
+                        serving = await getFood(fixFood.food_id);
+                    }
+                }
+            } catch (err) {
+                console.error("getDataAction error:", err.message);
+                return <div>An error occurred while searching for food</div>;
+            }
+
+            inputs.foods.push({
+                food,
+                portion,
+                serving,
+            });
+        }
+
+        const completion = await openai.chat.completions.create({
+            model: "google/gemini-2.0-flash-001",
+            messages: [
+                {
+                    role: "system",
+                    content: systemPrompt(),
+                },
+                {
+                    role: "user",
+                    content: JSON.stringify(inputs),
+                },
+            ],
+        });
+
+        const response = completion.choices[0].message.content;
+
+        try {
+            const cleaned = response.replace(/```json|```/g, "").trim();
+            const parsed = JSON.parse(cleaned);
+
+            parsed.per_food_breakdown.forEach((food) => {
+                Object.keys(totalNutrition).forEach((key) => {
+                    totalNutrition[key].amount += food[key].amount;
+                    if (!totalNutrition[key].unit) {
+                        totalNutrition[key].unit = food[key].unit;
+                    }
+                });
+            });
+
+            nutritions = parsed.per_food_breakdown;
+            insight = parsed.insight;
+            recommendations = parsed.recommendations;
+            score = parsed.score;
+
+            Object.values(totalNutrition).forEach((nutrient) => {
+                nutrient.amount = roundTwoDec(nutrient.amount);
+            });
+
+            if (
+                totalNutrition &&
+                nutritions &&
+                insight &&
+                recommendations &&
+                score
+            ) {
+                const updated = await prisma.result.update({
+                    where: { id: resultId },
+                    data: {
+                        totalNutrition,
+                        nutritions,
+                        insight,
+                        recommendations,
+                        score,
+                        status: "done",
+                    },
+                });
+
+                if (!updated) {
+                    console.log("An error occurred while saving food.");
+                }
+            }
+        } catch (err) {
+            return <div>{err.message}</div>;
+        }
     }
 
     const date = new Date(result.createdAt).toLocaleDateString("en-CA", {
@@ -78,12 +160,6 @@ export default function Page() {
         month: "long",
         year: "numeric",
     });
-    const context = result.input.context;
-    const totalNutrition = result.totalNutrition;
-    const nutritions = result.nutritions;
-    const insight = result.insight;
-    const recommendations = result.recommendations;
-    const score = result.score;
 
     return (
         <div className="flex flex-col gap-4 text-left text-sm">

@@ -3,19 +3,14 @@
 import { redirect } from "next/navigation";
 import { prisma } from "@/util/prisma";
 import { createId } from "@paralleldrive/cuid2";
-import { backgroundProcessing } from "../../../lib/processing";
 
 export async function getDataAction(_, formData) {
     const inputId = createId();
     const resultId = createId();
     const userId = formData.get("userId");
-    const userSex = formData.get("userSex");
-    const userAge = formData.get("userAge");
-    const userContext = formData.get("userContext");
     const size = formData.get("size");
     const context = formData.get("context");
     const foodsOriginal = [];
-    const foods = [];
 
     if (!context) {
         return {
@@ -45,14 +40,6 @@ export async function getDataAction(_, formData) {
         foodsOriginal.push({ food: food, portion: portion });
     }
 
-    const inputs = {
-        userSex,
-        userAge,
-        userContext,
-        context,
-        foods,
-    };
-
     await prisma.input.create({
         data: {
             id: inputId,
@@ -67,13 +54,8 @@ export async function getDataAction(_, formData) {
             id: resultId,
             userId: userId,
             inputId: inputId,
-            status: "processing",
         },
     });
-
-    setTimeout(() => {
-        backgroundProcessing({ resultId, size, foodsOriginal, inputs });
-    }, 0);
 
     redirect(`/result/${resultId}`);
 }
