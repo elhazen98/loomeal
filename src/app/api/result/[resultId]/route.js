@@ -18,7 +18,5 @@ export async function GET(req, { params }) {
         return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
 
-    const response = NextResponse.json(result);
-    response.headers.set("Cache-Control", "no-store");
-    return response;
+    return NextResponse.json(result);
 }
