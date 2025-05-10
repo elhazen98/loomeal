@@ -24,12 +24,14 @@ export default function Page() {
         const poll = async () => {
             try {
                 pollCount++;
-                const res = await fetch(`/api/result/${resultId}`);
+                const res = await fetch(`/api/result/${resultId}`, {
+                    cache: "no-store",
+                });
                 const data = await res.json();
 
                 if (firstFetch && res.ok && data.status !== "done") {
                     firstFetch = false;
-                    timeoutId = setTimeout(poll, 10000);
+                    timeoutId = setTimeout(poll, 5000);
                     return;
                 }
 
@@ -46,7 +48,7 @@ export default function Page() {
                     setLoading(false);
                 } else if (pollCount < maxPolls) {
                     firstFetch = false;
-                    timeoutId = setTimeout(poll, 10000);
+                    timeoutId = setTimeout(poll, 5000);
                 } else {
                     setError(true);
                     setLoading(false);
