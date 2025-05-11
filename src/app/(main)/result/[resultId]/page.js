@@ -9,6 +9,8 @@ import { getFood, searchFood } from "@/lib/fatsecret";
 import Fuse from "fuse.js";
 import { systemPrompt } from "@/lib/prompt";
 import { openai } from "@/util/openai";
+import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 export default async function Page({ params }) {
     const { resultId } = await params;
