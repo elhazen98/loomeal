@@ -2,17 +2,25 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { IconLoading } from "@/components/ui/icons";
 import { getDataAction } from "./action";
 import { useUser } from "../components/user-provider";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
+    const router = useRouter();
     const { id } = useUser();
     const [state, formAction, pending] = useActionState(getDataAction, {});
     const [context, setContext] = useState("");
     const [foods, setFoods] = useState([{ food: "", portion: "" }]);
     const [size, setSize] = useState(1);
+
+    useEffect(() => {
+        if (state.success && state.resultId) {
+            router.push(`/result/${state.resultId}`);
+        }
+    }, [state, router]);
 
     const handleContext = (value) => {
         setContext(value);
@@ -104,7 +112,7 @@ export default function Page() {
                         </div>
                     </div>
                 ))}
-                {foods.length < 5 && (
+                {foods.length < 3 && (
                     <Button
                         type="button"
                         onClick={addFoods}

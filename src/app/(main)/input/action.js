@@ -57,5 +57,8 @@ export async function getDataAction(_, formData) {
         },
     });
 
-    redirect(`/result/${resultId}`);
+    return {
+        success: true,
+        resultId: resultId,
+    };
 }
