@@ -59,6 +59,6 @@ export async function getDataAction(_, formData) {
 
     return {
         success: true,
-        resultId,
+        resultId: resultId,
     };
 }

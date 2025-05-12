@@ -2,11 +2,11 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { IconLoading } from "@/components/ui/icons";
 import { getDataAction } from "./action";
 import { useUser } from "../components/user-provider";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
     const router = useRouter();
