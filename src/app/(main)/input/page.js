@@ -112,7 +112,7 @@ export default function Page() {
                         </div>
                     </div>
                 ))}
-                {foods.length < 5 && (
+                {foods.length < 3 && (
                     <Button
                         type="button"
                         onClick={addFoods}
