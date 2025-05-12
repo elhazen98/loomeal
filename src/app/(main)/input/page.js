@@ -69,7 +69,7 @@ export default function Page() {
                 <div>
                     <div className="font-bold">{"What's on Your Plate?"}</div>
                     <div className="text-sm text-primary/50">
-                        {"Add the food items you're about to eat, one by one."}
+                        {"Add the food items you're about to eat, one-by-one."}
                     </div>
                 </div>
                 {foods.map((item, index) => (
