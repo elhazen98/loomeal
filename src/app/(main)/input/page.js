@@ -6,13 +6,21 @@ import { useActionState, useState } from "react";
 import { IconLoading } from "@/components/ui/icons";
 import { getDataAction } from "./action";
 import { useUser } from "../components/user-provider";
+import { useRouter } from "next/router";
 
 export default function Page() {
+    const router = useRouter();
     const { id } = useUser();
     const [state, formAction, pending] = useActionState(getDataAction, {});
     const [context, setContext] = useState("");
     const [foods, setFoods] = useState([{ food: "", portion: "" }]);
     const [size, setSize] = useState(1);
+
+    useEffect(() => {
+        if (state.success && state.resultId) {
+            router.push(`/result/${state.resultId}`);
+        }
+    }, [state, router]);
 
     const handleContext = (value) => {
         setContext(value);
