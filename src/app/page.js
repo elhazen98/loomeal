@@ -1,9 +1,9 @@
-import { Button } from "@/components/ui/button";
 import { Header } from "./components/header";
 import { Footer } from "./components/footer";
 import Image from "next/image";
 import Link from "next/link";
 import { Parkinsans } from "next/font/google";
+import { SpecialButton } from "./components/special-button";
 
 const parkinsans = Parkinsans({
     subsets: ["latin"],
@@ -40,10 +40,11 @@ export default async function Page() {
                                     }
                                 </div>
                             </div>
-                            <Link href={"/input"}>
-                                <Button variant="special" className="font-bold">
-                                    {"Try It Now, Free!"}
-                                </Button>
+                            <Link href={"/input"} className="w-4/5">
+                                <SpecialButton
+                                    text={"Try it Now, Free!"}
+                                    variant="special"
+                                />
                             </Link>
                         </div>
                     </main>

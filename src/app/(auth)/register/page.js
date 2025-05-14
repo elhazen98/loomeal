@@ -13,6 +13,7 @@ import Link from "next/link";
 import { registerAction } from "./action";
 import Image from "next/image";
 import { Label } from "@/components/ui/label";
+import { OauthButton } from "../components/oauth-button";
 
 export default function Page() {
     const [state, formAction, pending] = useActionState(registerAction, {});
@@ -79,6 +80,9 @@ export default function Page() {
                             {pending ? <IconLoading /> : "Register"}
                         </Button>
                     </form>
+                    <div className="w-4/5 pt-4">
+                        <OauthButton />
+                    </div>
                     <div className="p-4 text-primary/50">
                         {"Already have an account?"}
                         <span>

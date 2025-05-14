@@ -5,7 +5,7 @@ export default async function Layout({ children }) {
     const session = await auth();
 
     if (session) {
-        redirect("/dashboard");
+        redirect("/home");
     }
 
     return children;

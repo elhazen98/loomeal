@@ -1,3 +1,5 @@
+import { capitalize } from "@/lib/utils";
+
 export const Nutrition = ({ nutritions }) => {
     return (
         <div className="p-4 bg-chart-1 rounded-xl">
@@ -7,8 +9,8 @@ export const Nutrition = ({ nutritions }) => {
                     {nutritions.map((food, index) => (
                         <div key={index}>
                             <div className="font-bold flex justify-between">
-                                <div>{food.food}</div>
-                                <div>{food.portion}</div>
+                                <div>{capitalize(food.food)}</div>
+                                <div>{capitalize(food.portion)}</div>
                             </div>
                             <div className="flex justify-between">
                                 <div>Calories</div>

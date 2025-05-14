@@ -12,10 +12,10 @@ import { usePathname } from "next/navigation";
 export const BottomNavbar = () => {
     const pathName = usePathname();
     const navItems = [
-        { href: "/dashboard", icon: <IconHome /> },
-        { href: "/input", icon: <IconPencil /> },
-        { href: "/result", icon: <IconFolder /> },
-        { href: "/profile", icon: <IconPerson /> },
+        { href: "/home", icon: <IconHome />, name: "Home" },
+        { href: "/input", icon: <IconPencil />, name: "Input" },
+        { href: "/results", icon: <IconFolder />, name: "Results" },
+        { href: `/profile`, icon: <IconPerson />, name: "Profile" },
     ];
     return (
         <div className="p-2">
@@ -24,13 +24,14 @@ export const BottomNavbar = () => {
                     <Link
                         key={item.href}
                         href={item.href}
-                        className={`text-sm {} ${
+                        className={`text-xs flex flex-col items-center gap-0.5 text-bold ${
                             pathName.startsWith(item.href)
-                                ? "text-secondary scale-150 duration-150"
+                                ? "text-secondary scale-110 duration-150"
                                 : "text-primary-foreground"
                         }`}
                     >
-                        {item.icon}
+                        <div>{item.icon}</div>
+                        <div>{item.name}</div>
                     </Link>
                 ))}
             </nav>

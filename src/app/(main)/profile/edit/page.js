@@ -1,41 +1,20 @@
-"use client";
+import { prisma } from "@/util/prisma";
+import { EditForm } from "./component/edit-form";
+import { auth } from "@/lib/auth";
 
-import { useActionState } from "react";
-import { editProfileAction } from "./action";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import { useUser } from "../../components/user-provider";
+export default async function Page() {
+    const session = await auth();
 
-export default function Page() {
-    const { id, username, email, sex, age, userContext } = useUser();
-    const [state, formAction, pending] = useActionState(editProfileAction, {});
+    const user = await prisma.user.findUnique({
+        where: { id: session.user.id },
+    });
+
     return (
         <div>
-            <div>
-                <div>{username}</div>
-                <div>{id}</div>
+            <div className="text-2xl text-left font-extrabold mb-6">
+                Edit Profile
             </div>
-            <form action={formAction}>
-                <input name="userId" defaultValue={id} hidden />
-                <Input
-                    name="userSex"
-                    placeholder="Enter your sex"
-                    defaultValue={sex}
-                />
-                <Input
-                    name="userAge"
-                    type="number"
-                    placeholder="Enter your age"
-                    defaultValue={age}
-                />
-                <Textarea
-                    name="userContext"
-                    placeholder="Enter your goals or health condition. like 'low fat diet', 'have diabetes type 1' etc,"
-                    defaultValue={userContext}
-                />
-                <Button type="submit">Update</Button>
-            </form>
+            <EditForm user={user} />
         </div>
     );
 }

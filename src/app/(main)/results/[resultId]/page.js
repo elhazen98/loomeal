@@ -9,10 +9,16 @@ import { getFood, searchFood } from "@/lib/fatsecret";
 import Fuse from "fuse.js";
 import { systemPrompt } from "@/lib/prompt";
 import { openai } from "@/util/openai";
-import { redirect } from "next/navigation";
-import { revalidatePath } from "next/cache";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { auth } from "@/lib/auth";
 
 export default async function Page({ params }) {
+    if (process.env.NODE_ENV === "development") {
+        await new Promise((resolve) => setTimeout(resolve, 5000));
+    }
+
+    const session = await auth();
     const { resultId } = await params;
 
     const result = await prisma.result.findUnique({
@@ -23,7 +29,7 @@ export default async function Page({ params }) {
         },
     });
 
-    if (!result) {
+    if (!result || result.userId !== session.user.id) {
         return <NoResult />;
     }
 
@@ -196,7 +202,14 @@ export default async function Page({ params }) {
                 </div>
             </div>
             <Nutrition nutritions={nutritions} />
-            <DeleteResultButton resultId={resultId} />
+            <div className="grid grid-cols-3 gap-2">
+                <Link href="/results" className="col-span-2 w-full">
+                    <Button className="w-full font-bold">
+                        Back to Results
+                    </Button>
+                </Link>
+                <DeleteResultButton resultId={resultId} />
+            </div>
         </div>
     );
 }

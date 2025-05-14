@@ -15,7 +15,7 @@ export async function weeklyCounter() {
         },
     });
 
-    for (let i = 1; i <= 7; i++) {
+    for (let i = 0; i <= 6; i++) {
         const date = new Date();
         date.setDate(today.getDate() - i);
 

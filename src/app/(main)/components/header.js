@@ -13,8 +13,10 @@ export const Header = ({ username }) => {
                     className="hover:rotate-180 duration-200"
                 />
             </Link>
-            <Link href="/profile">
-                <div className="font-bold">{username}</div>
+            <Link href={`/profile`}>
+                <div className="underline underline-offset-3 font-bold">
+                    {username}
+                </div>
             </Link>
         </header>
     );
