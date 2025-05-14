@@ -1,3 +1,4 @@
+import { capitalize } from "@/lib/utils";
 import { google } from "@/util/arctic";
 import { prisma } from "@/util/prisma";
 import { cookies } from "next/headers";
@@ -31,7 +32,7 @@ export async function GET(req) {
     if (!user) {
         user = await prisma.user.create({
             data: {
-                name: newUser.name,
+                name: capitalize(newUser.name),
                 email: newUser.email,
             },
         });

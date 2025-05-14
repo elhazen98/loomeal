@@ -23,7 +23,7 @@ export const EditForm = ({ user }) => {
                         <Label htmlFor="userName">Username</Label>
                         <Input
                             name="userName"
-                            placeholder="Enter your sex"
+                            placeholder="Username"
                             defaultValue={username}
                             className="mt-2"
                             disabled={pending}
@@ -33,7 +33,7 @@ export const EditForm = ({ user }) => {
                         <Label htmlFor="userSex">Sex</Label>
                         <Input
                             name="userSex"
-                            placeholder="Enter your sex"
+                            placeholder="Male, Female"
                             defaultValue={sex}
                             className="mt-2"
                             disabled={pending}
@@ -44,7 +44,7 @@ export const EditForm = ({ user }) => {
                         <Input
                             name="userAge"
                             type="number"
-                            placeholder="Enter your age"
+                            placeholder="0-99"
                             defaultValue={age}
                             className="mt-2"
                             disabled={pending}
@@ -54,7 +54,7 @@ export const EditForm = ({ user }) => {
                         <Label htmlFor="userContext">Context</Label>
                         <Textarea
                             name="userContext"
-                            placeholder="Enter your goals or health condition. like 'low fat diet', 'have diabetes type 1' etc,"
+                            placeholder="Enter your goals or health condition. like 'low fat diet', 'have diabetes type 1' etc."
                             defaultValue={userContext}
                             className="mt-2"
                             disabled={pending}

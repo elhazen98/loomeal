@@ -1,11 +1,12 @@
 "use server";
 
+import { capitalize } from "@/lib/utils";
 import { prisma } from "@/util/prisma";
 import bcrypt from "bcryptjs";
 import { redirect } from "next/navigation";
 
 export async function registerAction(_, formData) {
-    const username = formData.get("username");
+    const username = capitalize(formData.get("username"));
     const email = formData.get("email");
     const password = formData.get("password");
 
