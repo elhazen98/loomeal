@@ -9,7 +9,7 @@ export const NoResult = () => {
                     <div className="font-extrabold text-5xl">NO RESULT</div>
                     <div className="text-sm opacity-50">
                         {
-                            "We couldn’t find the result — it may have been deleted or was never created."
+                            "We couldn’t find the result — it may have been deleted, was never created, or you don’t have permission to view it."
                         }
                     </div>
                 </div>

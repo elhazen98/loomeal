@@ -61,7 +61,7 @@ export default function Page() {
                 <Input
                     className="mb-8"
                     name="context"
-                    placeholder="breakfast, pre-workout, sahoor, etc."
+                    placeholder="Breakfast, pre-workout, sahoor, etc."
                     value={context}
                     disabled={pending || redirecting}
                     onChange={(e) => handleContext(e.target.value)}
