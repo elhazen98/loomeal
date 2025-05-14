@@ -42,7 +42,7 @@ export async function signinAction(_, formData) {
     const newSession = await prisma.session.create({
         data: {
             userId: user.id,
-            expires: new Date(Date.now() + 2 * 60 * 60 * 1000),
+            expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
         },
     });
 
@@ -53,5 +53,5 @@ export async function signinAction(_, formData) {
         sameSite: "lax",
     });
 
-    redirect("/dashboard");
+    redirect("/home");
 }

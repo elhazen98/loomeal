@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { SpecialButton } from "@/app/components/special-button";
 import Link from "next/link";
 
 export const NoResult = () => {
@@ -14,9 +14,7 @@ export const NoResult = () => {
                     </div>
                 </div>
                 <Link href="/result">
-                    <Button className="w-full font-bold" variant="secondary">
-                        See all result here
-                    </Button>
+                    <SpecialButton text="See all result here" />
                 </Link>
             </div>
         </div>

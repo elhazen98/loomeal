@@ -14,8 +14,12 @@ export const DeleteResultButton = ({ resultId }) => {
     return (
         <form action={formAction}>
             <input name="resultId" defaultValue={resultId} hidden />
-            <Button type="submit" className="w-full">
-                {pending ? <IconLoading /> : "Delete This Result"}
+            <Button
+                type="submit"
+                className="w-full font-bold"
+                disabled={pending}
+            >
+                {pending ? <IconLoading /> : "Delete"}
             </Button>
         </form>
     );

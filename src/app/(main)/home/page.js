@@ -18,16 +18,16 @@ export default async function Page() {
 
     return (
         <div className="flex flex-col h-full w-full gap-8">
-            <div className="flex flex-col justify-center items-center gap-8">
+            <div className="flex flex-col justify-center items-center gap-4">
                 <UserCard />
                 <TodayRecord todayRecord={todayRecord} />
                 <Link href="/input" className="w-full">
-                    <Button className="w-full p-6">
+                    <Button className="w-full p-6 mt-2">
                         <IconPlus /> Record A Meal
                     </Button>
                 </Link>
             </div>
-            <div className="flex flex-col justify-center items-center gap-8 w-full">
+            <div className="flex flex-col justify-center items-center gap-4 w-full">
                 <div className="flex flex-col justify-center items-center gap-2 w-full">
                     <div className="w-full text-right flex justify-between">
                         <div className="text-left w-full">
@@ -36,15 +36,25 @@ export default async function Page() {
                             </p>
                         </div>
                         <div className="w-full">
-                            <div className="font-bold text-3xl">
-                                {averageCalories}
+                            <div
+                                className={`font-bold ${
+                                    averageCalories ? "text-3xl" : "text-xl"
+                                }`}
+                            >
+                                {averageCalories
+                                    ? averageCalories
+                                    : "No Record"}
                             </div>
-                            <div className="text-sm">{"kcal (AVG)"}</div>
+                            <div className="text-sm">
+                                {averageCalories
+                                    ? "kcal (AVG)"
+                                    : "The log will display your past 7 days records."}
+                            </div>
                         </div>
                     </div>
                     <RecordChart previousRecord={previousRecord} />
                 </div>
-                <Link href="/result" className="w-full">
+                <Link href="/results" className="w-full">
                     <Button className="w-full p-6">
                         <IconFolder /> See All Record
                     </Button>

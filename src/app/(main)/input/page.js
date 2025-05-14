@@ -3,22 +3,22 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useActionState, useEffect, useState } from "react";
-import { IconLoading } from "@/components/ui/icons";
+import { IconLoading, IconMinus, IconPlus } from "@/components/ui/icons";
 import { getDataAction } from "./action";
-import { useUser } from "../components/user-provider";
 import { useRouter } from "next/navigation";
 
 export default function Page() {
     const router = useRouter();
-    const { id } = useUser();
     const [state, formAction, pending] = useActionState(getDataAction, {});
     const [context, setContext] = useState("");
     const [foods, setFoods] = useState([{ food: "", portion: "" }]);
     const [size, setSize] = useState(1);
+    const [redirecting, setRedirecting] = useState(false);
 
     useEffect(() => {
         if (state.success && state.resultId) {
-            router.push(`/result/${state.resultId}`);
+            setRedirecting(true);
+            router.push(`/results/${state.resultId}`);
         }
     }, [state, router]);
 
@@ -50,10 +50,9 @@ export default function Page() {
                 Record A Meal
             </div>
             <form action={formAction} className="flex flex-col gap-2 text-left">
-                <input name="userId" defaultValue={id} hidden />
                 <div>
                     <div className="font-bold">
-                        {"Tell Us What You're Eating"}
+                        {"Tell us what you're eating."}
                     </div>
                     <div className="text-sm text-primary/50">
                         {"Helps us understand the purpose of your meal."}
@@ -62,14 +61,15 @@ export default function Page() {
                 <Input
                     className="mb-8"
                     name="context"
-                    placeholder="Meal Context. (e.g., breakfast, pre-workout)"
+                    placeholder="breakfast, pre-workout, sahoor, etc."
                     value={context}
+                    disabled={pending || redirecting}
                     onChange={(e) => handleContext(e.target.value)}
                 />
                 <div>
-                    <div className="font-bold">{"What's on Your Plate?"}</div>
+                    <div className="font-bold">{"What's on your plate?"}</div>
                     <div className="text-sm text-primary/50">
-                        {"Add the food items you're about to eat, one-by-one."}
+                        {"Add the food items you're about to eat, one by one."}
                     </div>
                 </div>
                 {foods.map((item, index) => (
@@ -79,6 +79,7 @@ export default function Page() {
                                 name={`food${index}`}
                                 placeholder="Food Name"
                                 value={item.food}
+                                disabled={pending || redirecting}
                                 onChange={(e) =>
                                     handleChange(index, "food", e.target.value)
                                 }
@@ -88,6 +89,7 @@ export default function Page() {
                                 name={`portion${index}`}
                                 placeholder="Portion"
                                 value={item.portion}
+                                disabled={pending || redirecting}
                                 onChange={(e) =>
                                     handleChange(
                                         index,
@@ -98,15 +100,15 @@ export default function Page() {
                                 className=""
                             />
                             {foods.length > 1 && (
-                                <div className="absolute flex justify-end right-0 bottom-1/2 h-1/2">
-                                    <Button
+                                <div className="absolute flex justify-end right-0 top-0">
+                                    <button
                                         type="button"
-                                        variant="destructive"
+                                        disabled={pending || redirecting}
                                         onClick={() => delFoods(index)}
-                                        className="h-full px-1.5"
+                                        className="text-destructive text-xl"
                                     >
-                                        -
-                                    </Button>
+                                        <IconMinus />
+                                    </button>
                                 </div>
                             )}
                         </div>
@@ -115,16 +117,30 @@ export default function Page() {
                 {foods.length < 3 && (
                     <Button
                         type="button"
+                        disabled={pending || redirecting}
                         onClick={addFoods}
                         variant="add"
                         className="font-bold"
                     >
-                        +
+                        <IconPlus /> Add Food
                     </Button>
                 )}
                 <input name="size" value={size} readOnly hidden />
-                <Button type="submit" className="mt-8">
-                    {pending ? <IconLoading /> : "Submit"}
+                <Button
+                    type="submit"
+                    className="mt-8"
+                    disabled={pending || redirecting}
+                >
+                    {pending ? (
+                        <IconLoading />
+                    ) : redirecting ? (
+                        <div className="flex gap-2 items-center">
+                            <IconLoading />
+                            <div>Processing</div>
+                        </div>
+                    ) : (
+                        "Submit"
+                    )}
                 </Button>
                 {!state.success && (
                     <div className="text-red-500 transition-opacity duration-500 opacity-100 text-center">

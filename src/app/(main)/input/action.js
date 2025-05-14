@@ -1,13 +1,14 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { prisma } from "@/util/prisma";
 import { createId } from "@paralleldrive/cuid2";
+import { auth } from "@/lib/auth";
 
 export async function getDataAction(_, formData) {
+    const session = await auth();
+    const userId = session.user.id;
     const inputId = createId();
     const resultId = createId();
-    const userId = formData.get("userId");
     const size = formData.get("size");
     const context = formData.get("context");
     const foodsOriginal = [];

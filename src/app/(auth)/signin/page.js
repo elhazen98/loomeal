@@ -8,6 +8,7 @@ import { IconKey, IconLoading, IconPerson } from "@/components/ui/icons";
 import Link from "next/link";
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
+import { OauthButton } from "../components/oauth-button";
 
 export default function Page() {
     const [state, formAction, pending] = useActionState(signinAction, {});
@@ -65,6 +66,9 @@ export default function Page() {
                             {pending ? <IconLoading /> : "Sign In"}
                         </Button>
                     </form>
+                    <div className="w-4/5 pt-4">
+                        <OauthButton />
+                    </div>
                     <div className="p-4 text-primary/50">
                         {"Don't have an account?"}
                         <span>

@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { SpecialButton } from "./components/special-button";
 
 export default async function NotFound() {
     return (
@@ -14,13 +14,8 @@ export default async function NotFound() {
                             }
                         </div>
                     </div>
-                    <Link href="/">
-                        <Button
-                            className="w-full font-bold"
-                            variant="secondary"
-                        >
-                            Back to Home
-                        </Button>
+                    <Link href="/home">
+                        <SpecialButton text="Back to Home" />
                     </Link>
                 </div>
             </div>

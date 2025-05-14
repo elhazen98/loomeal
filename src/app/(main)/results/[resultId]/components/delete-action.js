@@ -16,5 +16,5 @@ export async function deleteResultAction(_, formData) {
         console.error("Delete result error:", error);
     }
 
-    redirect("/result");
+    redirect("/results");
 }

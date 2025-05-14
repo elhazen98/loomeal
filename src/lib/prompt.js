@@ -47,5 +47,9 @@ Response must be:
   insight: string,
   recommendations: [string]
   score: number
-}`;
+}
+
+IMPORTANT:
+1. Sex, age, and user context are optional. Please disregard them if the values seem illogical or irrelevant.
+2. If correcting a typo, first state the original error, then provide the corrected version along with your recommendation.`;
 }

@@ -11,5 +11,16 @@ export function roundTwoDec(num) {
 
 export function capitalize(str) {
     if (!str) return "";
-    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+    return str
+        .split(" ")
+        .map((word) => {
+            const firstLetterIndex = word.search(/[a-zA-Z]/);
+            if (firstLetterIndex === -1) return word;
+            return (
+                word.slice(0, firstLetterIndex) +
+                word.charAt(firstLetterIndex).toUpperCase() +
+                word.slice(firstLetterIndex + 1).toLowerCase()
+            );
+        })
+        .join(" ");
 }
