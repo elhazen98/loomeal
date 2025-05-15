@@ -171,7 +171,8 @@ export default async function Page({ params }) {
                         {capitalize(context)}
                     </div>
                     <div>
-                        <LocalDate date={result.createdAt} />
+                        {result.createdAt.toString()}
+                        {/* <LocalDate date={result.createdAt} /> */}
                     </div>
                 </div>
                 <div className="text-5xl">
