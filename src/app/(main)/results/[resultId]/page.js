@@ -12,6 +12,7 @@ import { openai } from "@/util/openai";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { auth } from "@/lib/auth";
+import { LocalDate } from "./components/local-date";
 
 export default async function Page({ params }) {
     if (process.env.NODE_ENV === "development") {
@@ -162,13 +163,6 @@ export default async function Page({ params }) {
         }
     }
 
-    const date = new Date(result.createdAt).toLocaleDateString("en-CA", {
-        weekday: "long",
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-    });
-
     return (
         <div className="flex flex-col gap-4 text-left text-sm">
             <div className="flex justify-between items-center">
@@ -176,7 +170,9 @@ export default async function Page({ params }) {
                     <div className="font-extrabold text-2xl">
                         {capitalize(context)}
                     </div>
-                    <div>{date}</div>
+                    <div>
+                        <LocalDate date={result.createdAt} />
+                    </div>
                 </div>
                 <div className="text-5xl">
                     {score === 1 && <IconDislike />}
