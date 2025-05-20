@@ -12,6 +12,7 @@ import { OauthButton } from "../components/oauth-button";
 
 export default function Page() {
     const [state, formAction, pending] = useActionState(signinAction, {});
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
     return (
         <div className="flex justify-center">
@@ -40,6 +41,12 @@ export default function Page() {
                         action={formAction}
                         className="flex flex-col gap-6 w-4/5"
                     >
+                        <input
+                            name="timezone"
+                            value={timezone}
+                            hidden
+                            readOnly
+                        />
                         <div className="flex flex-col gap-4">
                             <div className="flex flex-col gap-2">
                                 <Label htmlFor="email">Email</Label>
@@ -66,7 +73,12 @@ export default function Page() {
                             {pending ? <IconLoading /> : "Sign In"}
                         </Button>
                     </form>
-                    <div className="w-4/5 pt-4">
+                    <div className="flex items-center gap-4 my-4 w-4/5">
+                        <hr className="flex-grow border-t border-primary/30" />
+                        <span className="text-primary/30 text-sm">or</span>
+                        <hr className="flex-grow border-t border-primary/30" />
+                    </div>
+                    <div className="w-4/5">
                         <OauthButton />
                     </div>
                     <div className="p-4 text-primary/50">

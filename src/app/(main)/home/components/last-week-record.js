@@ -25,7 +25,7 @@ export const RecordChart = ({ previousRecord }) => {
                     tickMargin={10}
                     axisLine={{ stroke: "var(--secondary)", strokeWidth: 2 }}
                     tickFormatter={(value) =>
-                        value.split("/")[1] + "/" + value.split("/")[0]
+                        value.split("-")[2] + "/" + value.split("-")[1]
                     }
                 />
                 <ChartTooltip content={<ChartTooltipContent />} />

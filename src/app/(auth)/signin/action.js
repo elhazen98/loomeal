@@ -7,6 +7,7 @@ import bcrypt from "bcryptjs";
 
 export async function signinAction(_, formData) {
     const cookieStore = await cookies();
+    const timezone = formData.get("timezone");
     const email = formData.get("email");
     const password = formData.get("password");
 
@@ -42,6 +43,7 @@ export async function signinAction(_, formData) {
     const newSession = await prisma.session.create({
         data: {
             userId: user.id,
+            timezone: timezone,
             expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
         },
     });

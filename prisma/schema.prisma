@@ -27,6 +27,7 @@ model User {
 model Session {
   id String @id @default(cuid())
   expires DateTime
+  timezone String @default("UTC")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
