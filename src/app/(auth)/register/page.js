@@ -80,7 +80,12 @@ export default function Page() {
                             {pending ? <IconLoading /> : "Register"}
                         </Button>
                     </form>
-                    <div className="w-4/5 pt-4">
+                    <div className="flex items-center gap-4 my-4 w-4/5">
+                        <hr className="flex-grow border-t border-primary/30" />
+                        <span className="text-primary/30 text-sm">or</span>
+                        <hr className="flex-grow border-t border-primary/30" />
+                    </div>
+                    <div className="w-4/5">
                         <OauthButton />
                     </div>
                     <div className="p-4 text-primary/50">

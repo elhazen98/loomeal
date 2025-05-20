@@ -1,12 +1,13 @@
 import { prisma } from "@/util/prisma";
 import { auth } from "./auth";
 import { roundTwoDec } from "./utils";
+import { DateTime } from "luxon";
 
 export async function dailyCounter() {
     const session = await auth();
+    const timezone = session.timezone;
     const userId = session.user.id;
-    const today = new Date();
-    const todayDate = today.toLocaleDateString();
+    const todayDate = DateTime.now().setZone(timezone).toISODate();
 
     const previousMeal = await prisma.result.findMany({
         where: { userId: userId, status: "done" },
@@ -24,7 +25,9 @@ export async function dailyCounter() {
     };
 
     previousMeal.map((meal) => {
-        const date = new Date(meal.createdAt).toLocaleDateString();
+        const date = DateTime.fromISO(meal.createdAt.toISOString(), {
+            zone: timezone,
+        }).toISODate();
         if (date === todayDate) {
             todayRecord.calories += meal.totalNutrition.calories.amount;
             todayRecord.fat += meal.totalNutrition.fat.amount;

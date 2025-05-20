@@ -10,6 +10,7 @@ export async function GET(req) {
 
     const cookieStore = await cookies();
     const codeVerifier = cookieStore.get("codeVerifier")?.value;
+    const timezone = cookieStore.get("timezone")?.value;
 
     const tokens = await google.validateAuthorizationCode(code, codeVerifier);
     const accessToken = tokens.accessToken();
@@ -41,6 +42,7 @@ export async function GET(req) {
     const newSession = await prisma.session.create({
         data: {
             userId: user.id,
+            timezone: timezone,
             expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
         },
     });

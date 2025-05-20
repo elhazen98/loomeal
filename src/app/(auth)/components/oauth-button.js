@@ -9,10 +9,17 @@ export const OauthButton = () => {
     const [state, formAction, pending] = useActionState(
         continueWithGoogleAction
     );
+
+    const handleClick = () => {
+        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        document.cookie = `timezone=${timezone}`;
+    };
+
     return (
         <form action={formAction}>
             <Button
                 type="submit"
+                onClick={handleClick}
                 className="w-full bg-neutral-100 hover:border hover:border-primary hover:bg-neutral-100 text-primary items-center justify-center"
                 disabled={pending}
             >
